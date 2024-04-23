@@ -20,33 +20,37 @@ private:
     // adding handlers
     void handleMouseEvents();
 
-protected:
-    AbstractGame();
-    virtual ~AbstractGame();
+    void updatePhysics(); // calling function for updating physics
 
-    // get pointers
-    std::shared_ptr<GraphicsEngine> gfx;
-    std::shared_ptr<EventEngine> eventSystem;
-    // getting custom subsystem pointer
-    std::shared_ptr<MyPhysicsSubsystem> customSystem;
+    protected:
+        AbstractGame();
+        virtual ~AbstractGame();
 
-    /* Main loop control */
-    bool running;
-    bool paused;
-    double gameTime;
-    virtual void update() = 0;
-    virtual void render() = 0;
+        // get pointers
+        std::shared_ptr<GraphicsEngine> gfx;
+        std::shared_ptr<EventEngine> eventSystem;
+        // getting custom subsystem pointer
+        std::shared_ptr<MyPhysicsSubsystem> customSystem;
 
-    // define input handlers
-    virtual void handleKeyEvents() = 0;
-    virtual void onLeftMouseButton();
-    virtual void onRightMouseButton();
+        /* Main loop control */
+        bool running;
+        bool paused;
+        double gameTime;
 
-    // define game controls
-    void pause() { paused = true; }
-    void resume() { paused = false; }
+        // virtual functions are base class member functions that can be redefined in a derived class to achieve polymorphism
+        virtual void update() = 0;
+        virtual void render() = 0;
 
-public:
-    int runMainLoop();
+        // define input handlers
+        virtual void handleKeyEvents() = 0;
+        virtual void onLeftMouseButton();
+        virtual void onRightMouseButton();
+
+        // define game controls
+        void pause() { paused = true; }
+        void resume() { paused = false; }
+
+    public:
+        int runMainLoop();
 };
 

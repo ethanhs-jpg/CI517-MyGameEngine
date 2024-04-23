@@ -10,6 +10,7 @@ AbstractGame::AbstractGame() : running(true), gameTime(0.0)
 	//step 6
 	gfx = engine->getGraphicsEngine();
 	eventSystem = engine->getEventEngine();
+	customSystem = engine->getMyPhysicsSubsystem(); // custom subsystem for physics
 }
 
 AbstractGame::~AbstractGame()
@@ -19,15 +20,33 @@ AbstractGame::~AbstractGame()
 	//step 7
 	gfx.reset();
 	eventSystem.reset();
+	customSystem.reset(); // resetting the physics subsystem
 	
 	// kill engine
 	XCube2Engine::quit();
+
+	// end of program debug statements
+	#ifdef __DEBUG
+		debug("AbstractGame::~AbstractGame() finished");
+		debug("The game finished and cleaned up successfully. Press Enter to exit");
+		getchar();
+	#endif 
+}
+
+void AbstractGame::updatePhysics()
+{
+	customSystem->update();
 }
 
 int AbstractGame::runMainLoop()
 {
+	#ifdef __DEBUG
+		debug("Entered Main Loop");
+	#endif
+
 	gfx->clearScreen();
 	render();
+
 	while (running)
 	{
 		gfx->setFrameStart();
@@ -41,6 +60,7 @@ int AbstractGame::runMainLoop()
 		if (!paused)
 		{
 			update();
+			updatePhysics();
 			gameTime += 0.016; // 60 times a sec
 		}
 		
@@ -49,6 +69,10 @@ int AbstractGame::runMainLoop()
 		gfx->showScreen();
 		gfx->adjustFPSDelay(16); // atm hardcoded to ~60 FPS
 	}
+
+	#ifdef __DEBUG
+		debug("Exited Main Loop");
+	#endif
 	
 	return 0;
 }
