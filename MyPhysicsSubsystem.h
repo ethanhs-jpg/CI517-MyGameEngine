@@ -44,9 +44,9 @@ class MyPhysicsSubsystem
 
 		//void otherFunction();
 
-		/*void movement();
-		void collisionHandling();
-		void wallCollision();*/
+		//void movement();
+		//void collisionHandling();
+		//void wallCollision(std::shared_ptr<PhysicsObject> obj); // declaring wall collision function
 };
 
 class PhysicsObject
@@ -57,6 +57,10 @@ class PhysicsObject
 		Point2 center; // centre point of an object
 		float lX, lY, hlX, hlY; // lengths/half lengths
 		Vector2f force; // force applied to an object as a vector
+
+		float xVel, yVel; // x and y velocity variables
+		
+		float frameTime = static_cast<float>(1) / 60; // frametime variable for smooth physics
 
 		void applyForce(const Vector2f&); // applying force to the object
 
@@ -71,10 +75,16 @@ class PhysicsObject
 		float getHalfLengthY() { return hlY; }
 
 		bool isColliding(const PhysicsObject& other); // bool function checking for collisions between objects
+		
+		// screen limit collision handling
+		void screenLimit();
 
 		// applying horizontal and vertical forces
-		void applyForceVertical(const float& speed);
-		void applyForceHorizontal(const float& speed);
+		void applyForceVertical(const float& speed, const float& acceleration);
+		void applyForceHorizontal(const float& speed, const float& acceleration);
+
+		// applying drag
+		void applyDrag();
 
 		// virtual functions for applying gravity in different ways
 		virtual void applyGravity(const std::shared_ptr<MyPhysicsSubsystem>& engine); // overrides applyGravity() above
