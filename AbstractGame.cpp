@@ -10,6 +10,7 @@ AbstractGame::AbstractGame() : running(true), gameTime(0.0)
 	//step 6
 	gfx = engine->getGraphicsEngine();
 	eventSystem = engine->getEventEngine();
+	audioSystem = engine->getAudioEngine();
 	customSystem = engine->getMyPhysicsSubsystem(); // custom subsystem for physics
 }
 
@@ -20,6 +21,7 @@ AbstractGame::~AbstractGame()
 	//step 7
 	gfx.reset();
 	eventSystem.reset();
+	audioSystem.reset();
 	customSystem.reset(); // resetting the physics subsystem
 	
 	// kill engine

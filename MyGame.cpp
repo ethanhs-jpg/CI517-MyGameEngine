@@ -38,54 +38,59 @@ MyGame::~MyGame() {
 // handling gameplay events
 void MyGame::handleKeyEvents()
 {
-	// speed and acceleration values defined here
-	int speed = 3;
-	float acceleration = 2;
+	//std::cout << "\nhandleKeyEvents called";
 
-	bool wPressed, sPressed, aPressed, dPressed;
+	// speed and acceleration values defined here
+	int speed = 5;
+	float acceleration = 2;
+	float xForce = 0.0f;
+	float yForce = 0.0f;
+
+	bool keyPressed = false;
 
 	if (eventSystem->isPressed(Key::W)) // up
 	{
-		wPressed = true;
-		phy.applyForceVertical(speed, -acceleration);
+		//phy.applyForceVertical(speed, -acceleration);
+		//keyPressed = true;
+		yForce -= acceleration;
 	}
-	else wPressed = false;
-
 	if (eventSystem->isPressed(Key::S)) // down
 	{
-		sPressed = true;
-		phy.applyForceVertical(speed, acceleration);
+		//phy.applyForceVertical(speed, acceleration);
+		//keyPressed = true;
+		yForce += acceleration;
 	}
-	else sPressed = false;
-
 	if (eventSystem->isPressed(Key::A)) // left
 	{
-		aPressed = true;
-		phy.applyForceHorizontal(speed, -acceleration);
+		//phy.applyForceHorizontal(speed, -acceleration);
+		//keyPressed = true;
+		xForce -= acceleration;
 	}
-	else aPressed = false;
-
 	if (eventSystem->isPressed(Key::D)) // right
 	{
-		dPressed = true;
-		phy.applyForceHorizontal(speed, acceleration);
+		//phy.applyForceHorizontal(speed, acceleration);
+		//keyPressed = true;
+		xForce += acceleration;
 	}
-	else dPressed = false;
 
-	//phy.applyDrag();
+	phy.applyForceHorizontal(speed, xForce);
+	phy.applyForceVertical(speed, yForce);
 
-	// applying drag vertically/horizontally if relevant keys are released
-	//if (!wPressed && !sPressed) phy.applyDrag();
-	//if (!aPressed && !dPressed) phy.applyDrag();
+	if (xForce == 0.0f && yForce == 0.0f) phy.applyDrag();
+
+	/*if (!keyPressed)
+	{
+		phy.applyDrag();
+	}*/
 }
 
 void MyGame::update()
 {
-	handleKeyEvents();
-	//phy.applyDrag();
+	//handleKeyEvents(); // calling event handling here for better execution
 
 	// calling screenLimit handling before x/y coords are updated for more effective collision handling
-	phy.screenLimit();
+	phy.screenLimit(800.0, 600.0); // providing current screen dimensions
+	//phy.applyDrag();
 
 	// getting the x and y center coords of each box
 	box.x = phy.getCenter().x;
@@ -94,10 +99,10 @@ void MyGame::update()
 	box2.x = phyobj2.getCenter().x;
 	box2.y = phyobj2.getCenter().y;
 
-	if (!phy.isColliding(phyobj2))
+	/*if (!phy.isColliding(phyobj2))
 	{
-		//phy.applyGravity(customSystem);
-	}
+		phy.applyGravity(customSystem);
+	}*/
 
 	for (auto key : gameKeys)
 	{
@@ -106,6 +111,8 @@ void MyGame::update()
 			score += 200;
 			key->isAlive = false;
 			numKeys--;
+
+			std::cout << "\n" << score;
 		}
 	}
 

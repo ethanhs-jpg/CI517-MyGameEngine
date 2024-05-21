@@ -76,8 +76,8 @@ class PhysicsObject
 
 		bool isColliding(const PhysicsObject& other); // bool function checking for collisions between objects
 		
-		// screen limit collision handling
-		void screenLimit();
+		// screen limit collision handling with modifiable width and height variables
+		void screenLimit(const float& screenWidth, const float& screenHeight);
 
 		// applying horizontal and vertical forces
 		void applyForceVertical(const float& speed, const float& acceleration);

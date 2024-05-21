@@ -18,6 +18,7 @@
 // including provided subsystems
 #include "GraphicsEngine.h"
 #include "EventEngine.h"
+#include "AudioEngine.h"
 // including custom physics subsystem
 #include "MyPhysicsSubsystem.h"
 
@@ -31,6 +32,7 @@ private:
     // declaring shared pointers of provided subsystems
     std::shared_ptr<GraphicsEngine> gfxInstance;
     std::shared_ptr<EventEngine> eventInstance;
+    std::shared_ptr<AudioEngine> audioInstance;
     // declaring shared pointer of custom subsystem
     std::shared_ptr<MyPhysicsSubsystem> customInstance;
 
@@ -48,6 +50,7 @@ public:
     // getting shared instances of provided subsystems
     std::shared_ptr<GraphicsEngine> getGraphicsEngine() { return gfxInstance; }
     std::shared_ptr<EventEngine> getEventEngine() { return eventInstance; }
+    std::shared_ptr<AudioEngine> getAudioEngine() { return audioInstance; }
     // getting shared instance of custom subsystem
     std::shared_ptr<MyPhysicsSubsystem> getMyPhysicsSubsystem() { return customInstance; }
 

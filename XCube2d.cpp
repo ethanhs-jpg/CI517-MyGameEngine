@@ -37,6 +37,11 @@ XCube2Engine::XCube2Engine()
 #ifdef __DEBUG
     debug("EventEngine() successful");
 #endif
+
+    audioInstance = std::shared_ptr<AudioEngine>(new AudioEngine());
+#ifdef __DEBUG
+    debug("AudioEngine() successful");
+#endif
     
     // initialising custom subsystem
     customInstance = std::shared_ptr<MyPhysicsSubsystem>(new MyPhysicsSubsystem());
@@ -55,6 +60,7 @@ XCube2Engine::~XCube2Engine()
     // resetting provided subsystems
     gfxInstance.reset();
     eventInstance.reset();
+    audioInstance.reset();
     // resetting custom subsystem
     customInstance.reset();
 

@@ -29,6 +29,7 @@ private:
         // get pointers
         std::shared_ptr<GraphicsEngine> gfx;
         std::shared_ptr<EventEngine> eventSystem;
+        std::shared_ptr<AudioEngine> audioSystem;
         // getting custom subsystem pointer
         std::shared_ptr<MyPhysicsSubsystem> customSystem;
 

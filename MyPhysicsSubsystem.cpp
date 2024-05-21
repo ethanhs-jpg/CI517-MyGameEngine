@@ -53,10 +53,11 @@ void PhysicsObject::applyForceVertical(const float& speed, const float& accelera
 	if (yVel > speed) yVel = speed;
 	if (yVel < -speed) yVel = -speed;
 
+	// updating y coordinate given updated vertical velocity
 	center.y += yVel;
 
 	//std::cout << "\nAcceleration: " << acceleration;
-	std::cout << "\nyVel: " << yVel;
+	//std::cout << "\nyVel: " << yVel;
 }
 
 void PhysicsObject::applyForceHorizontal(const float& speed, const float& acceleration)
@@ -68,10 +69,11 @@ void PhysicsObject::applyForceHorizontal(const float& speed, const float& accele
 	if (xVel > speed) xVel = speed;
 	if (xVel < -speed) xVel = -speed;
 
+	// updating x coordinate given updated horizontal velocity
 	center.x += xVel;
 	
 	//std::cout << "\nAcceleration: " << acceleration;
-	std::cout << "\nxVel: " << xVel;
+	//std::cout << "\nxVel: " << xVel;
 }
 
 void PhysicsObject::applyDrag()
@@ -79,15 +81,19 @@ void PhysicsObject::applyDrag()
 	//std::cout << "\napplyDrag called";
 
 	// horizontal drag
-	if (abs(xVel) > 0.2f) xVel *= 0.9f; else xVel = 0;
-	if (abs(xVel) < -0.2f) xVel *= 0.9f; else xVel = 0;
+	if (std::abs(xVel) > 0.1f) xVel *= 0.95f;
+	else xVel = 0;
+	//if (abs(xVel) < -0.1f) xVel *= 0.9f; else xVel = 0;
 
 	// vertical drag
-	if (abs(yVel) > 0.2f) yVel *= 0.9f; else yVel = 0;
-	if (abs(yVel) < -0.2f) yVel *= 0.9f; else yVel = 0;
+	if (std::abs(yVel) > 0.1f) yVel *= 0.95f;
+	else yVel = 0;
+	//if (abs(yVel) < -0.1f) yVel *= 0.9f; else yVel = 0;
 
 	center.x += xVel;
 	center.y += yVel;
+
+	std::cout << "\nDrag applied: xVel: " << xVel << " yVel: " << yVel;
 }
 
 void PhysicsObject::applyAntiGravity(const MyPhysicsSubsystem& engine)
@@ -110,11 +116,12 @@ void MyPhysicsSubsystem::setGravity(float val, float interval)
 void MyPhysicsSubsystem::registerObject(std::shared_ptr<PhysicsObject> obj)
 {
 	objects.push_back(obj);
+	//playerObject = obj;
 }
 
 void MyPhysicsSubsystem::update()
 {
-
+	//objects.applyForceHorizontal(const float& speed, const float& acceleration);
 }
 
 // ========================
@@ -143,27 +150,27 @@ void MyPhysicsSubsystem::update()
 //}
 
 // function for handling screen limits
-void PhysicsObject::screenLimit()
+void PhysicsObject::screenLimit(const float& width, const float& height)
 {
 	//std::cout << "\nScreen limit handling function called\n";
 
 	// !!! Code sourced and adapted from my CI411 SDL game !!!
 	// Limit to edges
 	bool stopMoving = false;
-	if (center.x + hlX > 800) // if obj exceeds right edge
+	if (center.x + hlX > width) // if obj exceeds right edge
 	{
 		stopMoving = true;
-		center.x = 800 - hlX;
+		center.x = width - hlX;
 	}
 	if (center.x - hlX < 0) // if obj exceeds left edge
 	{
 		stopMoving = true;
 		center.x = hlX;
 	}
-	if (center.y + hlY > 600) // if obj exceeds bottom edge
+	if (center.y + hlY > height) // if obj exceeds bottom edge
 	{
 		stopMoving = true;
-		center.y = 600 - hlY;
+		center.y = height - hlY;
 	}
 	if (center.y < 0) // if obj exceeds top edge
 	{

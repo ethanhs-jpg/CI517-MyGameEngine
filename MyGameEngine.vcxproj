@@ -133,6 +133,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AbstractGame.cpp" />
+    <ClCompile Include="AudioEngine.cpp" />
     <ClCompile Include="EventEngine.cpp" />
     <ClCompile Include="GraphicsEngine.cpp" />
     <ClCompile Include="main.cpp" />
@@ -142,6 +143,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractGame.h" />
+    <ClInclude Include="AudioEngine.h" />
     <ClInclude Include="EngineCommon.h" />
     <ClInclude Include="EventEngine.h" />
     <ClInclude Include="GameMath.h" />

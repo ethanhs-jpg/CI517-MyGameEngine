@@ -51,6 +51,9 @@
     <ClCompile Include="MyPhysicsSubsystem.cpp">
       <Filter>Source Files\Engine\Subsystems</Filter>
     </ClCompile>
+    <ClCompile Include="AudioEngine.cpp">
+      <Filter>Source Files\Engine\Subsystems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyGame.h">
@@ -75,6 +78,9 @@
       <Filter>Header Files\Engine\Subsystems</Filter>
     </ClInclude>
     <ClInclude Include="MyPhysicsSubsystem.h">
+      <Filter>Header Files\Engine\Subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioEngine.h">
       <Filter>Header Files\Engine\Subsystems</Filter>
     </ClInclude>
   </ItemGroup>
