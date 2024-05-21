@@ -28,6 +28,13 @@ MyGame::MyGame() : AbstractGame(), numKeys(5), box{ 20, 20, 60, 60 }, box2{ 0, 0
 		k->pos = Point2(getRandom(0, 600), getRandom(0, 500)); // x, y (random range)
 		gameKeys.push_back(k);
 	}
+
+	// loading music and sound effects
+	backgroundMusic = Mix_LoadMUS("assets/audio/8bit-spaceshooter.mp3");
+	collectCoin - Mix_LoadWAV("assets/audio/coin.wav");
+
+	Mix_PlayMusic(backgroundMusic, -1);
+
 }
 
 // destructor
@@ -45,6 +52,7 @@ void MyGame::handleKeyEvents()
 	float acceleration = 2;
 	float xForce = 0.0f;
 	float yForce = 0.0f;
+	float dragCoefficient = 0.05;
 
 	bool keyPressed = false;
 
@@ -76,7 +84,8 @@ void MyGame::handleKeyEvents()
 	phy.applyForceHorizontal(speed, xForce);
 	phy.applyForceVertical(speed, yForce);
 
-	if (xForce == 0.0f && yForce == 0.0f) phy.applyDrag();
+	if (xForce == 0.0f) phy.applyHorizontalDrag(dragCoefficient);
+	if (yForce == 0.0f) phy.applyVerticalDrag(dragCoefficient);
 
 	/*if (!keyPressed)
 	{
@@ -113,6 +122,8 @@ void MyGame::update()
 			numKeys--;
 
 			std::cout << "\n" << score;
+
+			Mix_PlayChannel(-1, collectCoin, 0);
 		}
 	}
 

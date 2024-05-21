@@ -84,7 +84,9 @@ class PhysicsObject
 		void applyForceHorizontal(const float& speed, const float& acceleration);
 
 		// applying drag
-		void applyDrag();
+		//void applyDrag();
+		void applyHorizontalDrag(const float& dragCoefficient);
+		void applyVerticalDrag(const float& dragCoefficient);
 
 		// virtual functions for applying gravity in different ways
 		virtual void applyGravity(const std::shared_ptr<MyPhysicsSubsystem>& engine); // overrides applyGravity() above

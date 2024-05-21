@@ -76,7 +76,39 @@ void PhysicsObject::applyForceHorizontal(const float& speed, const float& accele
 	//std::cout << "\nxVel: " << xVel;
 }
 
-void PhysicsObject::applyDrag()
+void PhysicsObject::applyHorizontalDrag(const float& dragCoefficient)
+{
+	if (xVel > 0.0f)
+	{
+		xVel -= dragCoefficient;
+		if (xVel < 0.0f) xVel = 0.0f;
+	}
+	else if (xVel < 0.0f)
+	{
+		xVel += dragCoefficient;
+		if (xVel > 0.0f) xVel = 0.0f;
+	}
+
+	center.x += xVel;
+}
+
+void PhysicsObject::applyVerticalDrag(const float& dragCoefficient)
+{
+	if (yVel > 0.0f)
+	{
+		yVel -= dragCoefficient;
+		if (yVel < 0.0f) yVel = 0.0f;
+	}
+	else if (yVel < 0.0f)
+	{
+		yVel += dragCoefficient;
+		if (yVel > 0.0f) yVel = 0.0f;
+	}
+
+	center.y += yVel;
+}
+
+/*void PhysicsObject::applyDrag()
 {
 	//std::cout << "\napplyDrag called";
 
@@ -94,7 +126,7 @@ void PhysicsObject::applyDrag()
 	center.y += yVel;
 
 	std::cout << "\nDrag applied: xVel: " << xVel << " yVel: " << yVel;
-}
+}*/
 
 void PhysicsObject::applyAntiGravity(const MyPhysicsSubsystem& engine)
 {
