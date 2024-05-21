@@ -41,12 +41,6 @@ class MyPhysicsSubsystem
 
 		void registerObject(std::shared_ptr<PhysicsObject>); // registering an object for physics
 		void applyGravity(std::shared_ptr<PhysicsObject> obj); // applying gravity to respective objects
-
-		//void otherFunction();
-
-		//void movement();
-		//void collisionHandling();
-		//void wallCollision(std::shared_ptr<PhysicsObject> obj); // declaring wall collision function
 };
 
 class PhysicsObject

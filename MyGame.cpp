@@ -32,6 +32,8 @@ MyGame::MyGame() : AbstractGame(), numKeys(5), box{ 20, 20, 60, 60 }, box2{ 0, 0
 	// loading music and sound effects
 	backgroundMusic = Mix_LoadMUS("assets/audio/8bit-spaceshooter.mp3");
 	collectCoin - Mix_LoadWAV("assets/audio/coin.wav");
+	Mix_Volume(-1, 24);
+	Mix_VolumeMusic(24);
 
 	Mix_PlayMusic(backgroundMusic, -1);
 
@@ -48,55 +50,60 @@ void MyGame::handleKeyEvents()
 	//std::cout << "\nhandleKeyEvents called";
 
 	// speed and acceleration values defined here
-	int speed = 5;
-	float acceleration = 2;
-	float xForce = 0.0f;
-	float yForce = 0.0f;
-	float dragCoefficient = 0.05;
+	speed = 4;
+	acceleration = 0.5f;
+	dragCoefficient = 0.05f;
 
-	bool keyPressed = false;
+	//xForce = 0.0f;
+	//yForce = 0.0f;
+
+	//xKeyPressed = false;
+	//yKeyPressed = false;
 
 	if (eventSystem->isPressed(Key::W)) // up
 	{
 		//phy.applyForceVertical(speed, -acceleration);
-		//keyPressed = true;
+		yKeyPressed = true;
 		yForce -= acceleration;
 	}
 	if (eventSystem->isPressed(Key::S)) // down
 	{
 		//phy.applyForceVertical(speed, acceleration);
-		//keyPressed = true;
+		yKeyPressed = true;
 		yForce += acceleration;
 	}
 	if (eventSystem->isPressed(Key::A)) // left
 	{
 		//phy.applyForceHorizontal(speed, -acceleration);
-		//keyPressed = true;
+		xKeyPressed = true;
 		xForce -= acceleration;
 	}
 	if (eventSystem->isPressed(Key::D)) // right
 	{
 		//phy.applyForceHorizontal(speed, acceleration);
-		//keyPressed = true;
+		xKeyPressed = true;
 		xForce += acceleration;
 	}
+
+	//std::cout << keyPressed;
 
 	phy.applyForceHorizontal(speed, xForce);
 	phy.applyForceVertical(speed, yForce);
 
-	if (xForce == 0.0f) phy.applyHorizontalDrag(dragCoefficient);
-	if (yForce == 0.0f) phy.applyVerticalDrag(dragCoefficient);
-
-	/*if (!keyPressed)
+	if (!xKeyPressed)
 	{
-		phy.applyDrag();
-	}*/
+		phy.applyHorizontalDrag(dragCoefficient);
+		xForce = 0.0f;
+	}
+	if (!yKeyPressed)
+	{
+		phy.applyVerticalDrag(dragCoefficient);
+		yForce = 0.0f;
+	}
 }
 
 void MyGame::update()
 {
-	//handleKeyEvents(); // calling event handling here for better execution
-
 	// calling screenLimit handling before x/y coords are updated for more effective collision handling
 	phy.screenLimit(800.0, 600.0); // providing current screen dimensions
 	//phy.applyDrag();
@@ -113,7 +120,7 @@ void MyGame::update()
 		phy.applyGravity(customSystem);
 	}*/
 
-	for (auto key : gameKeys)
+	for (auto &key : gameKeys)
 	{
 		if (key->isAlive && (box.x == key->pos.x && box.y == key->pos.y))
 		{

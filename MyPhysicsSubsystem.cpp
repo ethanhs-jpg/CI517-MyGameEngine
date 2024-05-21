@@ -44,10 +44,14 @@ void PhysicsObject::applyGravity(const std::shared_ptr<MyPhysicsSubsystem>& engi
 	center += engine->gravity;
 }
 
+// ==========================
+// Vertical/Horizontal Forces
+// ==========================
+
 void PhysicsObject::applyForceVertical(const float& speed, const float& acceleration)
 {
 	// integrating acceleration over time to update velocity
-	yVel += acceleration * frameTime;
+	yVel += acceleration; // removed "* frametime" as this was causing issues
 
 	// limiting velocity to max speed
 	if (yVel > speed) yVel = speed;
@@ -63,7 +67,7 @@ void PhysicsObject::applyForceVertical(const float& speed, const float& accelera
 void PhysicsObject::applyForceHorizontal(const float& speed, const float& acceleration)
 {
 	// integrating acceleration over time to update velocity
-	xVel += acceleration * frameTime;
+	xVel += acceleration; // removed "* frametime" as this was causing issues
 
 	// limiting velocity to max speed
 	if (xVel > speed) xVel = speed;
@@ -76,36 +80,58 @@ void PhysicsObject::applyForceHorizontal(const float& speed, const float& accele
 	//std::cout << "\nxVel: " << xVel;
 }
 
+// ========================
+// Vertical/Horizontal Drag
+// ========================
+
+// applying drag on each axis separately
 void PhysicsObject::applyHorizontalDrag(const float& dragCoefficient)
 {
-	if (xVel > 0.0f)
+	//std::cout << "applyHorizontalDrag called";
+	/*if (xVel > 0.0f) // if the object is moving horizontally
 	{
-		xVel -= dragCoefficient;
-		if (xVel < 0.0f) xVel = 0.0f;
+		xVel -= dragCoefficient; // subtract the drag coefficient from the velocity every function call
+		if (xVel < 0.0f) xVel = 0.0f; // stopping movement if velocity is below a certain threshold
 	}
-	else if (xVel < 0.0f)
+	else if (xVel < 0.0f) // same logic for the opposing direction
 	{
 		xVel += dragCoefficient;
 		if (xVel > 0.0f) xVel = 0.0f;
-	}
+	}*/
 
-	center.x += xVel;
+	if (std::abs(xVel) > dragCoefficient) // if x velocity is greater than drag coefficient
+	{
+		// adding/subtracting drag coeff. depending on direction
+		if (xVel > 0.0f) xVel -= dragCoefficient;
+		else if (xVel < 0.0f) xVel += dragCoefficient;
+	}
+	else xVel = 0.0f; // setting velocity to 0 otherwise
+
+	center.x += xVel; // updating the x coordinate of the object
 }
 
 void PhysicsObject::applyVerticalDrag(const float& dragCoefficient)
 {
-	if (yVel > 0.0f)
-	{
-		yVel -= dragCoefficient;
-		if (yVel < 0.0f) yVel = 0.0f;
-	}
-	else if (yVel < 0.0f)
-	{
-		yVel += dragCoefficient;
-		if (yVel > 0.0f) yVel = 0.0f;
-	}
+	//if (yVel > 0.0f) // if the object is moving vertically
+	//{
+	//	yVel -= dragCoefficient; // subtract the drag coefficient from the velocity every function call
+	//	if (yVel < 0.0f) yVel = 0.0f; // stopping movement if velocity is below a certain threshold
+	//}
+	//else if (yVel < 0.0f) // same logic for the opposing direction
+	//{
+	//	yVel += dragCoefficient;
+	//	if (yVel > 0.0f) yVel = 0.0f;
+	//}
 
-	center.y += yVel;
+	if (std::abs(yVel) > dragCoefficient) // if x velocity is greater than drag coefficient
+	{
+		// adding/subtracting drag coeff. depending on direction
+		if (yVel > 0.0f) yVel -= dragCoefficient;
+		else if (yVel < 0.0f) yVel += dragCoefficient;
+	}
+	else yVel = 0.0f; // setting velocity to 0 otherwise
+
+	center.y += yVel; // updating the y coordinate of the object
 }
 
 /*void PhysicsObject::applyDrag()
@@ -133,8 +159,6 @@ void PhysicsObject::applyAntiGravity(const MyPhysicsSubsystem& engine)
 	center -= engine.gravity;
 }
 
-// ========================
-
 MyPhysicsSubsystem::MyPhysicsSubsystem() : gravity(Vector2f(0, DEFAULT_GRAVITY))
 {
 
@@ -148,38 +172,16 @@ void MyPhysicsSubsystem::setGravity(float val, float interval)
 void MyPhysicsSubsystem::registerObject(std::shared_ptr<PhysicsObject> obj)
 {
 	objects.push_back(obj);
-	//playerObject = obj;
 }
 
 void MyPhysicsSubsystem::update()
 {
-	//objects.applyForceHorizontal(const float& speed, const float& acceleration);
+
 }
 
-// ========================
-
-//void MyPhysicsSubsystem::otherFunction()
-//{
-//	std::cout << "\nOther function called";
-//}
-
-// ========================
-// Custom physics functions
-// ========================
-//void MyPhysicsSubsystem::gravity()
-//{
-//	std::cout << "\nGravity function called";
-//}
-//
-//void MyPhysicsSubsystem::movement()
-//{
-//	std::cout << "\nMovement function called";
-//}
-//
-//void MyPhysicsSubsystem::collisionHandling()
-//{
-//	std::cout << "\nCollision handling function called";
-//}
+// =============
+// Screen Limits
+// =============
 
 // function for handling screen limits
 void PhysicsObject::screenLimit(const float& width, const float& height)
@@ -213,9 +215,6 @@ void PhysicsObject::screenLimit(const float& width, const float& height)
 	if (stopMoving)
 	{
 		// stopping movement when colliding with bounds
-		//applyForceVertical(0, 1.5);
-		//applyForceHorizontal(0, 1.5);
-		
 		xVel = 0;
 		yVel = 0;
 	}

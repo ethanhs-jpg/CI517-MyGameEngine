@@ -43,6 +43,16 @@ class MyGame : public AbstractGame
         void render();
         void renderUI();
 
+        // custom speed, acceleration, forces, and drag coefficient values
+        int speed = 5;
+        float acceleration = 2.0f;
+        float xForce = 0.0f;
+        float yForce = 0.0f;
+        float dragCoefficient = 0.05f;
+        // boolean checks for key presses for each axis
+        bool xKeyPressed;
+        bool yKeyPressed;
+
     public:
         MyGame();
         ~MyGame();
