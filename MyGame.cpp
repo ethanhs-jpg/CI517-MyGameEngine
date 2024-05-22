@@ -18,6 +18,9 @@ MyGame::MyGame() : AbstractGame(), numKeys(5), box{ 20, 20, 60, 60 }, box2{ 0, 0
 	//customSystem->movement();
 	//customSystem->collisionHandling();
 
+	TTF_Font* font = TTF_OpenFont("assets/fonts/arial.ttf", 32); // opening the font stored in the project
+	gfx->useFont(font); // setting "font" as the font to use in the game
+
 	customSystem->setGravity(2, 2); // (1)value of gravity, (2)interval of application
 
 	// draw points on random locations
@@ -161,8 +164,11 @@ void MyGame::render()
 
 void MyGame::renderUI()
 {
+
+
 	gfx->setDrawColor(SDL_COLOR_AQUA);
 	std::string scoreStr = std::to_string(score);
+	gfx->drawText(scoreStr, 780 - scoreStr.length() * 50, 25); // drawing score text on screen
 
 	if (gameWon)
 	{

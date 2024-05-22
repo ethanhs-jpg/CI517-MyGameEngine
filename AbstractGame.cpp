@@ -1,5 +1,5 @@
 #include "AbstractGame.h"
-#include <iostream>
+//#include <iostream>
 using namespace std;
 
 AbstractGame::AbstractGame() : running(true), gameTime(0.0)
@@ -68,6 +68,7 @@ int AbstractGame::runMainLoop()
 		
 		gfx->clearScreen();
 		render();
+		renderUI();
 		gfx->showScreen();
 		gfx->adjustFPSDelay(16); // atm hardcoded to ~60 FPS
 	}
@@ -87,3 +88,4 @@ void AbstractGame::handleMouseEvents()
 
 void AbstractGame::onLeftMouseButton() {}
 void AbstractGame::onRightMouseButton() {}
+void AbstractGame::renderUI() {}

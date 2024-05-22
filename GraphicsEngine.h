@@ -14,6 +14,7 @@
 //code from xcube 2d
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h> // including text library
 
 
 #include "EngineCommon.h"
@@ -66,6 +67,8 @@ private:
     static SDL_Renderer* renderer;
     SDL_Color drawColor;
 
+    TTF_Font* font; // font variable
+
 
     Uint32 fpsAverage, fpsPrevious, fpsStart, fpsEnd;
 
@@ -73,6 +76,8 @@ private:
 
 public:
     ~GraphicsEngine();
+
+    void useFont(TTF_Font* font);
 
     /**
     * Clears everything on the screen
@@ -103,6 +108,7 @@ public:
     void drawEllipse(const Point2& center, const float& radiusX, const float& radiusY);
     void drawTexture(SDL_Texture*, SDL_Rect* src, SDL_Rect* dst, const double& angle = 0.0, const SDL_Point* center = 0, SDL_RendererFlip flip = SDL_FLIP_NONE);
     void drawTexture(SDL_Texture*, SDL_Rect* dst, SDL_RendererFlip flip = SDL_FLIP_NONE);
+    void drawText(const std::string& text, const int& x, const int& y); // function for drawing text to screen
 
 
     void setDrawColor(const SDL_Color&);
@@ -146,6 +152,7 @@ public:
     Uint32 getAverageFPS();
 
     static SDL_Texture* createTextureFromSurface(SDL_Surface*);
+    static SDL_Texture* createTextureFromString(const std::string&, TTF_Font*, SDL_Color); // SDL texture for text
 
 };
 

@@ -27,7 +27,9 @@ GraphicsEngine::GraphicsEngine() : fpsAverage(0), fpsPrevious(0), fpsStart(0), f
     if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG)
         throw EngineException("Failed to init SDL_image - PNG", IMG_GetError());
 
-
+    // exception throwing if text library failed to initialise
+    if (TTF_Init() < 0)
+        throw EngineException("Failed to init SDL_ttf", TTF_GetError());
 }
 
 GraphicsEngine::~GraphicsEngine() {
@@ -36,6 +38,7 @@ GraphicsEngine::~GraphicsEngine() {
 #endif
 
     IMG_Quit();
+    TTF_Quit(); // quitting text library
     SDL_DestroyWindow(window);
     SDL_Quit();
 
@@ -132,6 +135,17 @@ void GraphicsEngine::showScreen() {
     SDL_RenderPresent(renderer);
 }
 
+// function for using a font through the font library
+void GraphicsEngine::useFont(TTF_Font* _font) {
+    if (nullptr == _font) {
+#ifdef __DEBUG
+        debug("GraphicsEngine::useFont()", "font is null");
+#endif
+        return;
+    }
+
+    font = _font;
+}
 
 void GraphicsEngine::setFrameStart() {
     fpsStart = SDL_GetTicks();
@@ -155,6 +169,23 @@ Uint32 GraphicsEngine::getAverageFPS() {
 
 SDL_Texture* GraphicsEngine::createTextureFromSurface(SDL_Surface* surf) {
     return SDL_CreateTextureFromSurface(renderer, surf);
+}
+
+// creating textures from given text
+SDL_Texture* GraphicsEngine::createTextureFromString(const std::string& text, TTF_Font* _font, SDL_Color color)
+{
+    SDL_Texture* textTexture = nullptr;
+    SDL_Surface* textSurface = TTF_RenderText_Blended(_font, text.c_str(), color);
+    if (textSurface != nullptr) {
+        textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+        SDL_FreeSurface(textSurface);
+    }
+    else {
+        std::cout << "Failed to create texture from string: " << text << std::endl;
+        std::cout << TTF_GetError() << std::endl;
+    }
+
+    return textTexture;
 }
 
 
@@ -238,4 +269,15 @@ void GraphicsEngine::drawTexture(SDL_Texture* texture, SDL_Rect* src, SDL_Rect* 
 
 void GraphicsEngine::drawTexture(SDL_Texture* texture, SDL_Rect* dst, SDL_RendererFlip flip) {
     SDL_RenderCopyEx(renderer, texture, 0, dst, 0.0, 0, flip);
+}
+
+// function for drawing text
+void GraphicsEngine::drawText(const std::string& text, const int& x, const int& y)
+{
+    SDL_Texture* textTexture = createTextureFromString(text, font, drawColor);
+    int w, h;
+    SDL_QueryTexture(textTexture, 0, 0, &w, &h);
+    SDL_Rect dst = { x, y, w, h };
+    drawTexture(textTexture, &dst);
+    SDL_DestroyTexture(textTexture);
 }

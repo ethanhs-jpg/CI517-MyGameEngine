@@ -68,6 +68,11 @@ class PhysicsObject
 		float getHalfLengthX() { return hlX; }
 		float getHalfLengthY() { return hlY; }
 
+		// getting velocities along each axis
+		float getVelX() { return xVel; }
+		float getVelY() { return yVel; }
+
+
 		bool isColliding(const PhysicsObject& other); // bool function checking for collisions between objects
 		
 		// screen limit collision handling with modifiable width and height variables

@@ -41,6 +41,7 @@ private:
         // virtual functions are base class member functions that can be redefined in a derived class to achieve polymorphism
         virtual void update() = 0;
         virtual void render() = 0;
+        virtual void renderUI() = 0; // virtual function for rendering UI text
 
         // define input handlers
         virtual void handleKeyEvents() = 0;
