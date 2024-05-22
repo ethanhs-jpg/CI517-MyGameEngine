@@ -7,21 +7,14 @@
 
 #include "MyGame.h"
 
-MyGame::MyGame() : AbstractGame(), numKeys(5), box{ 20, 20, 60, 60 }, box2{ 0, 0, 60, 2000 }, score(0), lives(3), gameWon(false), phy({ 0,0 }, 10, 100), phyobj2({ 0,400 }, 2000,10)
+MyGame::MyGame() : AbstractGame(), numKeys(5), box{ 0, 0, 50, 50 }, box2{ 0, 0, 60, 2000 }, score(0), lives(3), gameWon(false), phy({ 0,0 }, 50, 50), phyobj2({ 0,540 }, 2000,10)
 {
 	gfx->setVerticalSync(true);
 
-	// calling custom subsystem function(s)
-	//customSystem->otherFunction();
-	// TEST calling physics functions
-	//customSystem->gravity();
-	//customSystem->movement();
-	//customSystem->collisionHandling();
-
-	TTF_Font* font = TTF_OpenFont("assets/fonts/arial.ttf", 32); // opening the font stored in the project
+	TTF_Font* font = TTF_OpenFont("assets/fonts/arial.ttf", 24); // opening the font stored in the project
 	gfx->useFont(font); // setting "font" as the font to use in the game
 
-	customSystem->setGravity(2, 2); // (1)value of gravity, (2)interval of application
+	customSystem->setGravity(2, 1); // (1)value of gravity, (2)interval of application
 
 	// draw points on random locations
 	for (int i = 0; i < numKeys; i++)
@@ -38,8 +31,8 @@ MyGame::MyGame() : AbstractGame(), numKeys(5), box{ 20, 20, 60, 60 }, box2{ 0, 0
 	Mix_Volume(-1, 24);
 	Mix_VolumeMusic(24);
 
+	// playing background music at initialisation
 	Mix_PlayMusic(backgroundMusic, -1);
-
 }
 
 // destructor
@@ -53,15 +46,15 @@ void MyGame::handleKeyEvents()
 	//std::cout << "\nhandleKeyEvents called";
 
 	// speed and acceleration values defined here
-	speed = 4;
-	acceleration = 0.5f;
-	dragCoefficient = 0.05f;
+	speed = 5;
+	acceleration = 0.1f;
+	dragCoefficient = 0.1f;
 
 	//xForce = 0.0f;
 	//yForce = 0.0f;
 
-	//xKeyPressed = false;
-	//yKeyPressed = false;
+	xKeyPressed = false;
+	yKeyPressed = false;
 
 	if (eventSystem->isPressed(Key::W)) // up
 	{
@@ -90,16 +83,20 @@ void MyGame::handleKeyEvents()
 
 	//std::cout << keyPressed;
 
+	// applying forces in each direction
 	phy.applyForceHorizontal(speed, xForce);
 	phy.applyForceVertical(speed, yForce);
 
+	// checking if no keys are pressed for either axis
 	if (!xKeyPressed)
 	{
+		// applying horizontal drag and resetting force
 		phy.applyHorizontalDrag(dragCoefficient);
 		xForce = 0.0f;
 	}
 	if (!yKeyPressed)
 	{
+		// applying vertical drag and resetting force
 		phy.applyVerticalDrag(dragCoefficient);
 		yForce = 0.0f;
 	}
@@ -107,13 +104,15 @@ void MyGame::handleKeyEvents()
 
 void MyGame::update()
 {
+	//Point2 previousPos = phy.getCenter();
+
 	// calling screenLimit handling before x/y coords are updated for more effective collision handling
 	phy.screenLimit(800.0, 600.0); // providing current screen dimensions
 	//phy.applyDrag();
 
 	// getting the x and y center coords of each box
-	box.x = phy.getCenter().x;
-	box.y = phy.getCenter().y;
+	box.x = phy.getCenter().x - box.w / 2; // subtracting box width for the true centre
+	box.y = phy.getCenter().y - box.h / 2; // subtracting box height for the true centr
 
 	box2.x = phyobj2.getCenter().x;
 	box2.y = phyobj2.getCenter().y;
@@ -123,9 +122,16 @@ void MyGame::update()
 		phy.applyGravity(customSystem);
 	}*/
 
+	if (phy.isColliding(phyobj2))
+	{
+		std::cout << "isColliding ";
+		//phy.setCenter(previousPos);
+
+	}
+
 	for (auto &key : gameKeys)
 	{
-		if (key->isAlive && (box.x == key->pos.x && box.y == key->pos.y))
+		if (box.x == key->pos.x && box.y == key->pos.y)
 		{
 			score += 200;
 			key->isAlive = false;
@@ -147,10 +153,12 @@ void MyGame::render()
 {
 	// drawing the primary box
 	gfx->setDrawColor(SDL_COLOR_RED);
+	gfx->fillRect(box.x, box.y, box.h, box.w);
+	gfx->setDrawColor(SDL_COLOR_ORANGE);
 	gfx->drawRect(box);
 	
 	// drawing secondary box
-	gfx->setDrawColor(SDL_COLOR_GREEN);
+	gfx->setDrawColor(SDL_COLOR_GRAY);
 	gfx->fillRect(box2.x, box2.y, box2.h, box2.w);
 
 	// drawing keys
@@ -164,7 +172,19 @@ void MyGame::render()
 
 void MyGame::renderUI()
 {
+	// text config and rendering for useful physics information
+	std::string screenText;
+	//SDL_Rect textRect = { 8,8,0,0 };
 
+	// adding values to the text output
+	screenText = "xVel: " + std::to_string(phy.getVelX());
+	screenText += "  yVel: " + std::to_string(phy.getVelY());
+	screenText += "  xPos: " + std::to_string(phy.getCenter().x);
+	screenText += "  yPos: " + std::to_string(phy.getCenter().y);
+
+	// rendering the text to the screen
+	gfx->setDrawColor(SDL_COLOR_GRAY);
+	gfx->drawText(screenText, 16, 560);
 
 	gfx->setDrawColor(SDL_COLOR_AQUA);
 	std::string scoreStr = std::to_string(score);

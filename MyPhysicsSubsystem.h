@@ -52,14 +52,14 @@ class PhysicsObject
 		float lX, lY, hlX, hlY; // lengths/half lengths
 		Vector2f force; // force applied to an object as a vector
 
+		Point2 previousPos; // previous position of an object
+
 		float xVel, yVel; // x and y velocity variables
 		
-		float frameTime = static_cast<float>(1) / 60; // frametime variable for smooth physics
-
 		void applyForce(const Vector2f&); // applying force to the object
 
 	public:
-		PhysicsObject(const Point2& center, float x, float y);
+		PhysicsObject(const Point2& center, float x, float y); // spawn position (x,y), collision width, collision height
 
 		Point2 getCenter() { return center; } // getting the centre point of the object
 		// getting the lengths/half lengths of the object

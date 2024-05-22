@@ -91,6 +91,8 @@ public:
     */
     void showScreen();
 
+    //void drawRect(const Rectangle2&);
+    //void drawRect(const Rectangle2&, const SDL_Color&);
     void drawRect(const SDL_Rect&);
     void drawRect(const SDL_Rect&, const SDL_Color&);
 

@@ -32,6 +32,7 @@ bool PhysicsObject::isColliding(const PhysicsObject& other)
 	Rectf r2 = { other.center.x - other.hlX, other.center.y - other.hlY, other.lX, other.lY }; // rect of any other object being collided with
 
 	return r1.intersects(r2); // returning true/false for if an intersect occurs
+	//std::cout << r1.intersects(r2);
 }
 
 void PhysicsObject::applyForce(const Vector2f& v)
@@ -59,9 +60,6 @@ void PhysicsObject::applyForceVertical(const float& speed, const float& accelera
 
 	// updating y coordinate given updated vertical velocity
 	center.y += yVel;
-
-	//std::cout << "\nAcceleration: " << acceleration;
-	//std::cout << "\nyVel: " << yVel;
 }
 
 void PhysicsObject::applyForceHorizontal(const float& speed, const float& acceleration)
@@ -75,9 +73,6 @@ void PhysicsObject::applyForceHorizontal(const float& speed, const float& accele
 
 	// updating x coordinate given updated horizontal velocity
 	center.x += xVel;
-	
-	//std::cout << "\nAcceleration: " << acceleration;
-	//std::cout << "\nxVel: " << xVel;
 }
 
 // ========================
@@ -186,10 +181,8 @@ void MyPhysicsSubsystem::update()
 // function for handling screen limits
 void PhysicsObject::screenLimit(const float& width, const float& height)
 {
-	//std::cout << "\nScreen limit handling function called\n";
-
-	// !!! Code sourced and adapted from my CI411 SDL game !!!
-	// Limit to edges
+	// Code sourced and adapted from my CI411 SDL game
+	// limit to edges
 	bool stopMoving = false;
 	if (center.x + hlX > width) // if obj exceeds right edge
 	{
@@ -206,10 +199,11 @@ void PhysicsObject::screenLimit(const float& width, const float& height)
 		stopMoving = true;
 		center.y = height - hlY;
 	}
-	if (center.y < 0) // if obj exceeds top edge
+	if (center.y - hlY < 0) // if obj exceeds top edge
 	{
+		// adjusted to account for half height
 		stopMoving = true;
-		center.y = 0;
+		center.y = hlY;
 	}
 
 	if (stopMoving)
