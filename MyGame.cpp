@@ -168,6 +168,8 @@ void MyGame::update()
 			numKeys--;
 
 			std::cout << "Key collected";
+
+			Mix_PlayChannel(-1, collectCoin, 0);
 		}
 	}
 

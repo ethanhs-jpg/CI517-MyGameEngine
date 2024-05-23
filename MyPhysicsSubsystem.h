@@ -33,9 +33,6 @@ class MyPhysicsSubsystem
 	public:
 		//~MyPhysicsSubsystem(); // public destructor called when an instance goes out of scope to release resources
 
-		// ========================
-		// Custom physics functions
-		// ========================
 		void setGravity(float gravityVal, float worldUpdateInterval); // setting gravity and updating every second
 		void update(); // updating the physics state
 
@@ -51,11 +48,8 @@ class PhysicsObject
 		Point2 center; // centre point of an object
 		float lX, lY, hlX, hlY; // lengths/half lengths
 		Vector2f force; // force applied to an object as a vector
-
-		Point2 previousPos; // previous position of an object
-
+		//Point2 previousPos; // previous position of an object
 		float xVel, yVel; // x and y velocity variables
-		
 		void applyForce(const Vector2f&); // applying force to the object
 
 	public:
@@ -67,26 +61,22 @@ class PhysicsObject
 		float getLengthY() { return lY; }
 		float getHalfLengthX() { return hlX; }
 		float getHalfLengthY() { return hlY; }
-
 		// getting velocities along each axis
 		float getVelX() { return xVel; }
 		float getVelY() { return yVel; }
-
-
 		bool isColliding(const PhysicsObject& other); // bool function checking for collisions between objects
 		
-		// screen limit collision handling with modifiable width and height variables
+		// ========================
+		// Custom physics functions
+		// ========================
+		// screen limit collision handling with adjustable width and height
 		void screenLimit(const float& screenWidth, const float& screenHeight);
-
 		// applying horizontal and vertical forces
 		void applyForceVertical(const float& speed, const float& acceleration);
 		void applyForceHorizontal(const float& speed, const float& acceleration);
-
-		// applying drag
-		//void applyDrag();
+		//void applyDrag(); // applying drag
 		void applyHorizontalDrag(const float& dragCoefficient);
 		void applyVerticalDrag(const float& dragCoefficient);
-
 		// virtual functions for applying gravity in different ways
 		virtual void applyGravity(const std::shared_ptr<MyPhysicsSubsystem>& engine); // overrides applyGravity() above
 		virtual void applyAntiGravity(const MyPhysicsSubsystem& engine);

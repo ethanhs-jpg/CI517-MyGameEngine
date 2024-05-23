@@ -28,8 +28,10 @@ PhysicsObject::PhysicsObject(const Point2& center, float x, float y) : center(ce
 
 bool PhysicsObject::isColliding(const PhysicsObject& other)
 {
-	Rectf r1 = { center.x - hlX, center.y - hlY, lX, lY }; // rect of the current object
-	Rectf r2 = { other.center.x - other.hlX, other.center.y - other.hlY, other.lX, other.lY }; // rect of any other object being collided with
+	// rect of the current object
+	Rectf r1 = { center.x - hlX, center.y - hlY, lX, lY };
+	// rect of any other object being collided with
+	Rectf r2 = { other.center.x - other.hlX, other.center.y - other.hlY, other.lX, other.lY };
 
 	return r1.intersects(r2); // returning true/false for if an intersect occurs
 	//std::cout << r1.intersects(r2);
@@ -82,6 +84,16 @@ void PhysicsObject::applyForceHorizontal(const float& speed, const float& accele
 // applying drag on each axis separately
 void PhysicsObject::applyHorizontalDrag(const float& dragCoefficient)
 {
+	if (std::abs(xVel) > dragCoefficient) // if x velocity is greater than drag coefficient
+	{
+		// adding/subtracting drag coeff. depending on direction
+		if (xVel > 0.0f) xVel -= dragCoefficient;
+		else if (xVel < 0.0f) xVel += dragCoefficient;
+	}
+	else xVel = 0.0f; // setting velocity to 0 otherwise
+
+	center.x += xVel; // updating the x coordinate of the object
+
 	//std::cout << "applyHorizontalDrag called";
 	/*if (xVel > 0.0f) // if the object is moving horizontally
 	{
@@ -93,20 +105,20 @@ void PhysicsObject::applyHorizontalDrag(const float& dragCoefficient)
 		xVel += dragCoefficient;
 		if (xVel > 0.0f) xVel = 0.0f;
 	}*/
-
-	if (std::abs(xVel) > dragCoefficient) // if x velocity is greater than drag coefficient
-	{
-		// adding/subtracting drag coeff. depending on direction
-		if (xVel > 0.0f) xVel -= dragCoefficient;
-		else if (xVel < 0.0f) xVel += dragCoefficient;
-	}
-	else xVel = 0.0f; // setting velocity to 0 otherwise
-
-	center.x += xVel; // updating the x coordinate of the object
 }
 
 void PhysicsObject::applyVerticalDrag(const float& dragCoefficient)
 {
+	if (std::abs(yVel) > dragCoefficient) // if y velocity is greater than drag coefficient
+	{
+		// adding/subtracting drag coeff. depending on direction
+		if (yVel > 0.0f) yVel -= dragCoefficient;
+		else if (yVel < 0.0f) yVel += dragCoefficient;
+	}
+	else yVel = 0.0f; // setting velocity to 0 otherwise
+
+	center.y += yVel; // updating the y coordinate of the object
+
 	//if (yVel > 0.0f) // if the object is moving vertically
 	//{
 	//	yVel -= dragCoefficient; // subtract the drag coefficient from the velocity every function call
@@ -117,16 +129,6 @@ void PhysicsObject::applyVerticalDrag(const float& dragCoefficient)
 	//	yVel += dragCoefficient;
 	//	if (yVel > 0.0f) yVel = 0.0f;
 	//}
-
-	if (std::abs(yVel) > dragCoefficient) // if x velocity is greater than drag coefficient
-	{
-		// adding/subtracting drag coeff. depending on direction
-		if (yVel > 0.0f) yVel -= dragCoefficient;
-		else if (yVel < 0.0f) yVel += dragCoefficient;
-	}
-	else yVel = 0.0f; // setting velocity to 0 otherwise
-
-	center.y += yVel; // updating the y coordinate of the object
 }
 
 /*void PhysicsObject::applyDrag()
