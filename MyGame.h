@@ -25,12 +25,14 @@ struct GameKey {
 class MyGame : public AbstractGame
 {
     private:
-        SDL_Rect box, box2; // (1)xcoord, (2)ycoord, (3)width, (4)height
+        Rect box, box2; // (1)xcoord, (2)ycoord, (3)width, (4)height
         PhysicsObject phy, phyobj2;
 
         // loading audio in for use in the game demo
         Mix_Music* backgroundMusic = NULL;
         Mix_Chunk* collectCoin = NULL;
+
+        SDL_Texture* sprite1 = NULL;
 
         std::vector<std::shared_ptr<GameKey>> gameKeys;
 

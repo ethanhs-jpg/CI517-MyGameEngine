@@ -197,29 +197,33 @@ void GraphicsEngine::setDrawScale(const Vector2f& v) {
 /* ALL DRAW FUNCTIONS */
 /* overloads explicitly call SDL funcs for better performance hopefully */
 
-//void GraphicsEngine::drawRect(const Rectangle2& rect) {
-//    SDL_RenderDrawRect(renderer, &rect.getSDLRect());
-//}
-//
-//void GraphicsEngine::drawRect(const Rectangle2& rect, const SDL_Color& color) {
-//    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, 255);
-//    SDL_RenderDrawRect(renderer, &rect.getSDLRect());
-//    SDL_SetRenderDrawColor(renderer, drawColor.r, drawColor.g, drawColor.b, 255);
-//}
+void GraphicsEngine::drawRect(const Rectangle2& rect) {
+    SDL_Rect sdlRect = rect.getSDLRect();
 
-void GraphicsEngine::drawRect(const SDL_Rect& rect)
-{
-    // const Rectangle2 *p = &rect;
-    SDL_RenderDrawRect(renderer, &rect);
+    SDL_RenderDrawRect(renderer, &sdlRect);
 }
 
-void GraphicsEngine::drawRect(const SDL_Rect& rect, const SDL_Color& color) {
+void GraphicsEngine::drawRect(const Rectangle2& rect, const SDL_Color& color) {
+    SDL_Rect sdlRect = rect.getSDLRect();
 
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, 255);
-
-    SDL_RenderDrawRect(renderer, &rect);
+    SDL_RenderDrawRect(renderer, &sdlRect);
     SDL_SetRenderDrawColor(renderer, drawColor.r, drawColor.g, drawColor.b, 255);
 }
+
+//void GraphicsEngine::drawRect(const SDL_Rect& rect)
+//{
+//    // const Rectangle2 *p = &rect;
+//    SDL_RenderDrawRect(renderer, &rect);
+//}
+//
+//void GraphicsEngine::drawRect(const SDL_Rect& rect, const SDL_Color& color) {
+//
+//    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, 255);
+//
+//    SDL_RenderDrawRect(renderer, &rect);
+//    SDL_SetRenderDrawColor(renderer, drawColor.r, drawColor.g, drawColor.b, 255);
+//}
 
 void GraphicsEngine::drawRect(SDL_Rect* rect, const SDL_Color& color) {
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, 255);
