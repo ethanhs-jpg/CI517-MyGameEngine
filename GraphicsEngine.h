@@ -135,10 +135,7 @@ public:
 
     /**
     * Shows a message box with given info and title
-    *
-    * Note: this function will block the execution on
-    * thread where it was called
-    *
+    * Note: this function will block the execution on thread where it was called
     * @param info - the info to be shown
     * @param title - title of the message box, may be left out
     */

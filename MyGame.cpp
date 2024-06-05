@@ -41,7 +41,7 @@ MyGame::MyGame() : AbstractGame(), numKeys(10), box{ 0, 0, 50, 50 }, box2{ 0, 0,
 
 	// loading music and sound effects
 	backgroundMusic = Mix_LoadMUS("assets/audio/8bit-spaceshooter.mp3");
-	collectCoin - Mix_LoadWAV("assets/audio/coin.wav");
+	collectCoin = Mix_LoadWAV("assets/audio/coin.wav"); // TYPO: had "-" instead of "="
 	Mix_Volume(-1, 24);
 	Mix_VolumeMusic(24);
 
@@ -61,8 +61,6 @@ MyGame::~MyGame() {
 // handling gameplay events
 void MyGame::handleKeyEvents()
 {
-	//std::cout << "\nhandleKeyEvents called";
-
 	// speed and acceleration values defined here
 	speed = 4;
 	acceleration = 0.1f;
@@ -70,7 +68,6 @@ void MyGame::handleKeyEvents()
 
 	//xForce = 0.0f;
 	//yForce = 0.0f;
-
 	xKeyPressed = false;
 	yKeyPressed = false;
 
@@ -124,13 +121,13 @@ void MyGame::update()
 {
 	//Point2 previousPos = phy.getCenter();
 
-	// calling screenLimit handling before x/y coords are updated for more effective collision handling
+	// calling screenLimit handling before x/y coords are updated
 	phy.screenLimit(800.0, 600.0); // providing current screen dimensions
 	//phy.applyDrag();
 
 	// getting the x and y center coords of each box
 	box.x = phy.getCenter().x - box.w / 2; // subtracting box width for the true centre
-	box.y = phy.getCenter().y - box.h / 2; // subtracting box height for the true centr
+	box.y = phy.getCenter().y - box.h / 2; // subtracting box height for the true centre
 
 	box2.x = phyobj2.getCenter().x;
 	box2.y = phyobj2.getCenter().y;
@@ -169,7 +166,7 @@ void MyGame::update()
 
 			std::cout << "Key collected";
 
-			Mix_PlayChannel(-1, collectCoin, 0);
+			Mix_PlayChannel(-1, collectCoin, 0); // WORKING
 		}
 	}
 
